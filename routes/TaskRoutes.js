@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
-const Task = require('./Task');
+const Task = require('./TaskRoutes');
 
 // ניתוב ליצירת משימה חדשה
 router.post('/tasks', async (req, res) => {

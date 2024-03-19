@@ -1,16 +1,25 @@
 const jwt = require('jsonwebtoken');
+const User = require("./models/User");
 
-function authenticateJWT(req, res, next) {
-  const token = req.headers.authorization;
-  if (token) {
-    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-      if (err) {
-        return res.sendStatus(403);
-      }
-      req.user = user;
-      next();
-    });
-  } else {
-    res.sendStatus(401);
+const auth = async (req, res, next) => {
+  try {
+    const webToken = req.header("Authorization").replace("Holder ", "");
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findOne({
+      id: decoded.id,
+      "tokens.token": token,
+    })
+
+    if (!user) {
+      throw new Error();
+    }
+
+    req.token = token;
+    req.user = user;
+    next();
+  } catch (error) {
+    res.status(401).send({ error: "Failed to Authenticate"})
   }
-}
+};
+
+module.exports = auth;

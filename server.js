@@ -1,14 +1,13 @@
 // server.js
 
 // ייבוא התלויות
+require('dotenv').config();
 const express = require('express');
-// const userRoutes = require('./routes/userRoutes');
+const userRouter = require('./routes/userRoutes');
+const taskRouter = require('./routes/TaskRoutes');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
-
-// ייבוא הקונפיגורציה מהקובץ .env
-require('dotenv').config();
 
 // יצירת אפליקציה Express
 const app = express();
@@ -25,12 +24,14 @@ mongoose.connect(DB_URI, {})
 // הגדרת מידות middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-// app.use('/api/users', userRoutes); 
+ 
 
 // הגדרת נתיבים
 app.get('/', (req, res) => {
   res.send('Welcome to the Personal Task Manager API!');
 });
+app.use("/auth", userRouter);
+app.use("/task", taskRouter);
 
 // הפעלת השרת
 const PORT = process.env.PORT || 3000;
@@ -38,6 +39,6 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
-// app.listen(3000, () => console.log('Server listening on port 3000'));
+
 
 
