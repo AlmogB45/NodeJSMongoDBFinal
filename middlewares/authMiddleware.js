@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { authenticateJWT } = require('./auth'); // Assuming auth.js is in the same directory
+const { authenticateJWT } = require('../auth'); // Assuming auth.js is in the same directory
 
 const authMiddleware = (req, res, next) => {
   const token = req.headers.authorization;

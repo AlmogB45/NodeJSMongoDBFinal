@@ -5,6 +5,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
+const authMiddleware = require('../middlewares/authMiddleware');
 
 // Route for user signup
 router.post('/signup', async (req, res) => {
@@ -55,16 +56,50 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// Protected route example
-// router.get('/profile', authenticateJWT, async (req, res) => {
-//   try {
-//     // Access authenticated user from req.user
-//     const user = await User.findById(req.user.userId);
-//     res.status(200).json({ user });
-//   } catch (err) {
-//     res.status(400).json({ error: err.message });
-//   }
-// });
+router.get("/users", async (req, res) => {
+  try {
+    const users = await User.find();
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ error: err.message});
+  }
+});
+
+router.get("/users/:id", async (req, res) => {
+  const _id = req.params.id;
+  try {
+    const user = await User.findById(_id);
+    if (!user) {
+      return res.status(404).send();
+    }
+    res.send(user);
+  } catch (error) {
+    res.status(500).send();
+  }
+});
+
+ router.patch("/users/:id", async (req, res) => {
+ const updates = Object.keys(req.body);
+ const allowUpdates = ["username", "password", "email"];
+ const isValidOperation = updates.every((update) =>
+  allowUpdates.includes(update)
+  );
+  if (!isValidOperation) {
+    return res.status(400).send({ error: "Invalid updates! "});
+  }
+  try {
+    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!user) {
+      return res.status(404).send();
+    }
+    res.send(user);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+ }); 
 
 module.exports = router;
 
