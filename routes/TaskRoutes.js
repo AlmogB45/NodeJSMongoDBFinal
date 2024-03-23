@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 const Task = require('../models/Tasks');
 
-// ניתוב ליצירת משימה חדשה
+// Route to create a new task
 router.post('/tasks', async (req, res) => {
   try {
     const { title, description, status, dueDate, userId } = req.body;
@@ -22,7 +22,7 @@ router.post('/tasks', async (req, res) => {
   }
 });
 
-// ניתוב לקבלת כלל המשימות
+// Route to get all available tasks
 router.get('/tasks', async (req, res) => {
   try {
     const tasks = await Task.find(); 
@@ -32,6 +32,7 @@ router.get('/tasks', async (req, res) => {
   }
 });
 
+// Route to get a task based on ID
 router.get('/tasks/:id', async (req, res) => {
   try {
     const taskId = req.params.id;
@@ -45,8 +46,6 @@ router.get('/tasks/:id', async (req, res) => {
   }
 });
 
-
-// ניתוב לקבלת משימה לפי המזהה
 router.get('/tasks/:id', async (req, res) => {
   try {
     const task = await Task.findById(req.params.id);
@@ -59,7 +58,7 @@ router.get('/tasks/:id', async (req, res) => {
   }
 });
 
-// ניתוב לעדכון משימה לפי המזהה
+// Route to patch (update) task based on specific ID 
 router.patch('/tasks/:id', async (req, res) => {
   try {
     const taskId = req.params.id;
@@ -88,7 +87,7 @@ router.patch('/tasks/:id', async (req, res) => {
 
 
 
-// ניתוב למחיקת משימה לפי המזהה
+// Route to delete task based on specific ID
 router.delete('/tasks/:id', async (req, res) => {
   try {
     const taskId = req.params.id;

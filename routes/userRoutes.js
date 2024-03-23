@@ -78,6 +78,7 @@ router.get("/users/:id", async (req, res) => {
   }
 });
 
+// Route for patching (updating) user information based on specific ID
  router.patch("/users/:id", async (req, res) => {
  const updates = Object.keys(req.body);
  const allowUpdates = ["username", "password", "email"];

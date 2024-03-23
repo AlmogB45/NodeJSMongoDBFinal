@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
 const User = require("./models/User");
 
+// Authhentication (Webtoken) code
+
 const auth = async (req, res, next) => {
   try {
     const webToken = req.header("Authorization").replace("Holder ", "");

@@ -1,6 +1,6 @@
 // server.js
 
-// ייבוא התלויות
+// Dependancy import
 require('dotenv').config();
 const express = require('express');
 const userRouter = require('./routes/userRoutes');
@@ -9,31 +9,30 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 
-// יצירת אפליקציה Express
+// Express app creation
 const app = express();
 
-// הגדרת מידע מוקשה עבור מסד הנתונים MongoDB
+// Database information setup for MongoDB
 const DB_URI = process.env.DB_URI;
 const JWT_SECRET = process.env.JWT_SECRET;
 
-// חיבור למסד הנתונים MongoDB
+// Connection to MongoDB database
 mongoose.connect(DB_URI, {})
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('Failed to connect to MongoDB', err));
 
-// הגדרת מידות middleware
+// Middleware mounting
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
  
-
-// הגדרת נתיבים
+// Path setup
 app.get('/', (req, res) => {
   res.send('Welcome to the Personal Task Manager API!');
 });
 app.use("/auth", userRouter);
 app.use("/task", taskRouter);
 
-// הפעלת השרת
+// Server activation
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
